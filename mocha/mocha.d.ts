@@ -8,7 +8,7 @@ interface Mocha {
     setup(options: MochaSetupOptions): Mocha;
 
     //Run tests and invoke `fn()` when complete.
-    run(callback: () => void): void;
+    run(callback?: () => void): void;
 
     // Set reporter as function
     reporter(reporter: () => void): Mocha;
@@ -31,7 +31,7 @@ interface MochaSetupOptions {
     ui?: string;
 
     //array of accepted globals
-    globals?: Array;
+    globals?: any[];
 
     // reporter instance (function or string), defaults to `mocha.reporters.Dot`
     reporter?: any;
