@@ -7,23 +7,24 @@
 // - https://github.com/borisyankov/DefinitelyTyped/issues/1563
 // - https://github.com/borisyankov/DefinitelyTyped/tree/def/bluebird/bluebird
 
-declare class Promise {
+declare class Promise<T> {
 	/**
 	 * Create a new promise. The passed in function will receive functions `resolve` and `reject` as its arguments which can be called to seal the fate of the created promise.
 	 */
-	constructor(resolver: (resolve: (value: any) => void, reject: (reason: any) => any) => void);
+	constructor(resolver: (resolve: (value: T) => void, reject: (reason: any) => any) => void);
 	/**
 	 * Promises/A+ `.then()` with progress handler. Returns a new promise chained from this promise. The new promise will be rejected or resolved dedefer on the passed `fulfilledHandler`, `rejectedHandler` and the state of this promise.
 	 */
-	then(fulfilledHandler?: (value: any) => any, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any):Promise;
+	then<TResult>(fulfilledHandler?: (value: T) => TResult, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any): Promise<TResult>;
+    then<TResult>(fulfilledHandler?: (value: T) => Promise<TResult>, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any): Promise<TResult>;
 
 	/**
 	 * This is a catch-all exception handler, shortcut for calling `.then(null, handler)` on this promise. Any exception happening in a `.then`-chain will propagate to nearest `.catch` handler.
 	 *
 	 * Alias `.caught();` for compatibility with earlier ECMAScript version.
 	 */
-	catch(handler: (reason: any) => any):Promise;
-	caught(handler: (reason: any) => any):Promise;
+	catch<TResult>(handler: (reason: any) => TResult): Promise<TResult>;
+	caught<TResult>(handler: (reason: any) => Promise<TResult>): Promise<TResult>;
 
 	/**
 	 * This extends `.catch` to work more like catch-clauses in languages like Java or C#. Instead of manually checking `instanceof` or `.name === "SomeError"`, you may specify a number of error constructors which are eligible for this catch handler. The catch handler that is first met that has eligible constructors specified, is the one that will be called.
@@ -33,24 +34,31 @@ declare class Promise {
 	 * Alias `.caught();` for compatibility with earlier ECMAScript version.
 	 */
 		//TODO expand this complex overload (weird)
-	catch(predicate: (reason: any) => boolean, handler: (reason: any) => any): Promise;
-	caught(predicate: (reason: any) => boolean, handler: (reason: any) => any): Promise;
+	catch<TResult>(predicate: (reason: any) => boolean, handler: (reason: any) => TResult): Promise<TResult>;
+    catch<TResult>(predicate: (reason: any) => boolean, handler: (reason: any) => Promise<TResult>): Promise<TResult>;
+    caught<TResult>(predicate: (reason: any) => boolean, handler: (reason: any) => TResult): Promise<TResult>;
+    caught<TResult>(predicate: (reason: any) => boolean, handler: (reason: any) => Promise<TResult>): Promise<TResult>;
 
-	catch(ErrorClass: Function, handler: (reason: any) => any): Promise;
-	caught(ErrorClass: Function, handler: (reason: any) => any): Promise;
+	catch<TResult>(ErrorClass: Function, handler: (reason: any) => TResult): Promise<TResult>;
+    catch<TResult>(ErrorClass: Function, handler: (reason: any) => Promise<TResult>): Promise<TResult>;
+    caughth<TResult>(ErrorClass: Function, handler: (reason: any) => TResult): Promise<TResult>;
+    caught<TResult>(ErrorClass: Function, handler: (reason: any) => Promise<TResult>): Promise<TResult>;
 
 	/**
 	 * Like `.catch` but instead of catching all types of exceptions, it only catches those that don't originate from thrown errors but rather from explicit rejections.
 	 */
-	error(rejectedHandler: (reason: any) => any): Promise;
+	error<TResult>(rejectedHandler: (reason: any) => TResult): Promise<TResult>;
+    error<TResult>(rejectedHandler: (reason: any) => Promise<TResult>): Promise<TResult>;
 
 	/**
 	 * Pass a handler that will be called regardless of this promise's fate. Returns a new promise chained from this promise. There are special semantics for `.finally()` in that the final value cannot be modified from the handler.
 	 *
 	 * Alias `.lastly();` for compatibility with earlier ECMAScript version.
 	 */
-	finally(handler: (value: any) => any): Promise;
-	lastly(handler: (value: any) => any): Promise;
+	finally<TResult>(handler: (value: T) => TResult): Promise<TResult>;
+    finally<TResult>(handler: (value: T) => Promise<TResult>): Promise<TResult>;
+	lastly<TResult>(handler: (value: T) => TResult): Promise<TResult>;
+    lastly<TResult>(handler: (value: T) => Promise<TResult>): Promise<TResult>;
 
 	/**
 	 * Create a promise that follows this promise, but is bound to the given `thisArg` value. A bound promise will call its handlers with the bound value set to `this`. Additionally promises derived from a bound promise will also be bound promises with the same `thisArg` binding as the original promise.
@@ -60,7 +68,8 @@ declare class Promise {
 	/**
 	 * Like `.then()`, but any unhandled rejection that ends up here will be thrown as an error.
 	 */
-	done(fulfilledHandler?: (value: any) => any, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any): Promise;
+	done<TResult>(fulfilledHandler?: (value: T) => TResult, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any): Promise<TResult>;
+    done<TResult>(fulfilledHandler?: (value: T) => Promise<TResult>, rejectedHandler?: (reason: any) => any, progressHandler?: (note: any) => any): Promise<TResult>;
 
 	/**
 	 * Shorthand for `.then(null, null, handler);`. Attach a progress handler that will be called if this promise is progressed. Returns a new promise chained from this promise.
