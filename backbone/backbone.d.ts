@@ -10,7 +10,7 @@
 declare module Backbone {
 
     interface AddOptions extends Silenceable {
-        at: number;
+        at?: number;
     }
 
     interface HistoryOptions extends Silenceable {
@@ -19,7 +19,7 @@ declare module Backbone {
     }
 
     interface NavigateOptions {
-        trigger: boolean;
+        trigger?: boolean;
     }
 
     interface RouterOptions {
@@ -120,7 +120,7 @@ declare module Backbone {
         has(attribute: string): boolean;
         hasChanged(attribute?: string): boolean;
         isNew(): boolean;
-        isValid(): boolean;
+        isValid(options?:any): boolean;
         previous(attribute: string): any;
         previousAttributes(): any[];
         save(attributes?: any, options?: ModelSaveOptions): any;
@@ -158,7 +158,9 @@ declare module Backbone {
         comparator(compare: Model, to?: Model): any;
 
         add(model: Model, options?: AddOptions): Collection;
+        add(model: any, options?: AddOptions): Collection;
         add(models: Model[], options?: AddOptions): Collection;
+        add(models: any[], options?: AddOptions): Collection;
         at(index: number): Model;
         get(id: any): Model;
         create(attributes: any, options?: ModelSaveOptions): Model;
@@ -168,10 +170,12 @@ declare module Backbone {
         remove(model: Model, options?: Silenceable): Model;
         remove(models: Model[], options?: Silenceable): Model[];
         reset(models?: Model[], options?: Silenceable): Model[];
+        reset(models?: any[], options?: Silenceable): Model[];
         shift(options?: Silenceable): Model;
         sort(options?: Silenceable): Collection;
         unshift(model: Model, options?: AddOptions): Model;
         where(properies: any): Model[];
+        findWhere(properties: any): Model;
 
         _prepareModel(attrs?: any, options?: any): any;
         _removeReference(model: Model): void;
@@ -334,4 +338,8 @@ declare module Backbone {
     function setDomLibrary(jQueryNew: any): any;
 	
     var $: JQueryStatic;
+}
+
+declare module "backbone" {
+    export = Backbone;
 }

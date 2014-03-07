@@ -8,6 +8,7 @@
 declare module ng.ui {
 
     interface IState {
+        name?: string;
         template?: any;
         templateUrl?: any;
         templateProvider?: () => string;
@@ -18,8 +19,8 @@ declare module ng.ui {
         params?: any[];
         views?: {};
         abstract?: boolean;
-        onEnter?: Function;
-        onExit?: Function;
+        onEnter?: any;
+        onExit?: any;
         data?: any;
     }
 
@@ -41,12 +42,20 @@ declare module ng.ui {
     }
 
     interface IUrlRouterProvider extends IServiceProvider {
-        when(whenPath: string, toPath: string): IUrlRouterProvider;
+        when(whenPath: RegExp, handler: Function): IUrlRouterProvider;
+        when(whenPath: RegExp, handler: any[]): IUrlRouterProvider;
         when(whenPath: RegExp, toPath: string): IUrlRouterProvider;
+        when(whenPath: IUrlMatcher, hanlder: Function): IUrlRouterProvider;
+        when(whenPath: IUrlMatcher, handler: any[]): IUrlRouterProvider;
         when(whenPath: IUrlMatcher, toPath: string): IUrlRouterProvider;
+        when(whenPath: string, handler: Function): IUrlRouterProvider;
+        when(whenPath: string, handler: any[]): IUrlRouterProvider;
+        when(whenPath: string, toPath: string): IUrlRouterProvider;
+        otherwise(handler: Function): IUrlRouterProvider;
+        otherwise(handler: any[]): IUrlRouterProvider;
         otherwise(path: string): IUrlRouterProvider;
-        otherwise(path: Function): IUrlRouterProvider;
         rule(handler: Function): IUrlRouterProvider;
+        rule(handler: any[]): IUrlRouterProvider;
     }
 
     interface IStateOptions {
@@ -75,6 +84,7 @@ declare module ng.ui {
         get(state: string): IState;
         get(): IState[];
         current: IState;
+        params: IStateParamsService;
     }
 
     interface IStateParamsService {
